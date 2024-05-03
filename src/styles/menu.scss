@@ -1,0 +1,51 @@
+.uvc-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: fit-content;
+  height: fit-content;
+  z-index: 1;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: .2s ease-in-out;
+
+  &_wrapper {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  &_trigger {
+    position: relative;
+    z-index: 3;
+  }
+
+
+
+  &--active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &--fancy {
+    .uvc-menu {
+      border-radius: 4px;
+
+      &_item {
+        padding: 4px 12px;
+        background: #222;
+        transition: .2s ease-in-out background;
+        color: #fff;
+
+        * {
+          color: #fff;
+        }
+
+        &:hover {
+          background: #444;
+        }
+      }
+    }
+  }
+}
