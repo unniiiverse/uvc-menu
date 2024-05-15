@@ -9,7 +9,7 @@ import React from "react";
 import { Menu, MenuItem } from "uvc-menu";
 
 // Optional styling
-import 'uvc-menu/dist/style.css'
+import 'uvc-menu/css'
 
 
 const Component: React.FC = () => {
