@@ -9,7 +9,9 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   plugins: ['react-refresh'],
   rules: {
-    indent: ["error", 2],
+    indent: ["error", 2, {
+      SwitchCase: 1
+    }],
     "no-unused-vars": ["off", {
       vars: "all",
       args: "after-used",
