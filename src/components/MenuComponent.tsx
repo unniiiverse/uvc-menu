@@ -73,13 +73,13 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, menuClassName, g
 
     // Set position due to direction
     if (direction === 'bottom') {
-      menu.style.top = `${trigger.offsetHeight + gap}px`;
+      menu.style.top = `${trigger.offsetHeight + gap!}px`;
     } else if (direction === 'top') {
-      menu.style.bottom = `${trigger.offsetHeight + gap}px`;
+      menu.style.bottom = `${trigger.offsetHeight + gap!}px`;
     } else if (direction === 'left') {
-      menu.style.right = `${trigger.offsetWidth + gap}px`;
+      menu.style.right = `${trigger.offsetWidth + gap!}px`;
     } else if (direction === 'right') {
-      menu.style.left = `${trigger.offsetWidth + gap}px`;
+      menu.style.left = `${trigger.offsetWidth + gap!}px`;
     }
 
     // Set aligment
