@@ -8,7 +8,7 @@ Default component usage
 import React from "react";
 import { Menu, MenuItem, MenuList } from "uvc-menu";
 
-// Optional styling
+// Required styling
 import 'uvc-menu/css'
 
 
@@ -74,6 +74,9 @@ interface IMenuProps {
    * @default "bottom"
    */
   direction?: TDirection
+
+  /** Menu id */
+  id?: string
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {

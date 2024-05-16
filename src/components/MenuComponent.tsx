@@ -1,4 +1,4 @@
-import React, { HTMLProps, useState, useEffect, useRef } from "react";
+import React, { HTMLProps, useState, useEffect, useRef, RefObject } from "react";
 
 import '../styles/menu.scss';
 
@@ -38,6 +38,9 @@ interface IMenuProps {
    * @default "bottom"
    */
   direction?: TDirection
+
+  /** Menu id */
+  id?: string
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
@@ -58,8 +61,8 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName }) => {
-  const ref = useRef<HTMLDivElement>(null);
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id }) => {
+  const parentRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   // Set default values to optional vars
@@ -72,7 +75,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   /** Initialize */
   useEffect(() => {
-    const parent = ref.current;
+    const parent = parentRef.current;
 
     // Pass if parent is undefined
     if (!parent) return;
@@ -124,7 +127,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   /** Handle state */
   useEffect(() => {
-    const parent = ref.current;
+    const parent = parentRef.current;
 
     // Pass if parent is undefined
     if (!parent) return;
@@ -191,7 +194,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   /** Animation handler */
   function handleAnimation() {
-    const parent = ref.current;
+    const parent = parentRef.current;
 
     // Pass if parent is undefined
     if (!parent) return;
@@ -233,7 +236,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   }
 
   return (
-    <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={ref}>
+    <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={parentRef} id={id}>
       <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0}>
         {trigger}
       </button>

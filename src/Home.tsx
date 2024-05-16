@@ -9,7 +9,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'}>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'} id="fsdfsdsfd">
         <p>hello</p>
 
         <MenuList>
