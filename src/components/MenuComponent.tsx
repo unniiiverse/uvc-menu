@@ -41,6 +41,9 @@ interface IMenuProps {
 
   /** Menu id */
   id?: string
+
+  /** Menu ref */
+  ref?: RefObject<any>
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
@@ -61,7 +64,7 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -236,12 +239,12 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   }
 
   return (
-    <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={parentRef} id={id}>
+    <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={parentRef}>
       <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0}>
         {trigger}
       </button>
 
-      <div className={`uvc-menu ${className ? className : ''}`} role="menu">
+      <div className={`uvc-menu ${className ? className : ''}`} role="menu" id={id} ref={ref}>
         {children}
       </div>
     </div>
