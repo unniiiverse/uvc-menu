@@ -14,7 +14,7 @@ interface IMenuProps {
   children: React.ReactNode | React.ReactNode[]
 
   /** Menu classname */
-  menuClassName?: string
+  className?: string
 
   /** Gap between trigger and menu
    * @default "16px"
@@ -45,9 +45,17 @@ interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
   className?: string
 }
 
+interface IMenuListProps extends HTMLProps<HTMLUListElement> {
+  /** Item inner */
+  children: React.ReactNode | React.ReactNode[],
+
+  /** Item classname */
+  className?: string
+}
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, menuClassName, gap, animation, align, direction }) => {
+
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -223,12 +231,18 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, menuClassName, g
         {trigger}
       </button>
 
-      <div className={`uvc-menu ${menuClassName ? menuClassName : ''}`}>
-        <ul className="uvc-menu_items" role="menu">
-          {children}
-        </ul>
+      <div className={`uvc-menu ${className ? className : ''}`}>
+        {children}
       </div>
     </div>
+  );
+};
+
+export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...props }) => {
+  return (
+    <ul className="uvc-menu_items" role="menu" {...props}>
+      {children}
+    </ul>
   );
 };
 

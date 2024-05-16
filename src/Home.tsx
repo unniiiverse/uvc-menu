@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, MenuItem } from "../index";
+import { Menu, MenuItem, MenuList } from "../index";
 
 
 const Home: React.FC = () => {
@@ -9,10 +9,14 @@ const Home: React.FC = () => {
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" menuClassName={'uvc-menu--fancy'}>
-        <MenuItem>Item</MenuItem>
-        <MenuItem>Item</MenuItem>
-        <MenuItem>Item</MenuItem>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'}>
+        <p>hello</p>
+
+        <MenuList>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+        </MenuList>
       </Menu>
 
       {/* <Menu trigger={<Trigger />} animation="slide" direction="left" menuClassName={'uvc-menu--fancy'}>
