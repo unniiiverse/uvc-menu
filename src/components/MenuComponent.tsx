@@ -16,10 +16,13 @@ interface IMenuProps {
   /** Menu classname */
   className?: string
 
+  /** Trigger classname */
+  triggerClassName?: string
+
   /** Gap between trigger and menu
    * @default "16px"
    */
-  gap?: number,
+  gap?: number
 
   /** Menu appearing animation
    * @default "default"
@@ -55,7 +58,7 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -141,6 +144,8 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       items.forEach(item => {
         item.tabIndex = 0;
       });
+
+      menu.setAttribute('aria-hidden', 'false')
     } else {
       // Close menu
 
@@ -150,6 +155,8 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       items.forEach(item => {
         item.tabIndex = -1;
       });
+
+      menu.setAttribute('aria-hidden', 'true')
     }
 
     // Handle animation
@@ -227,11 +234,11 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   return (
     <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={ref}>
-      <button className="uvc-menu_trigger" onClick={toggleMenu} tabIndex={0}>
+      <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0}>
         {trigger}
       </button>
 
-      <div className={`uvc-menu ${className ? className : ''}`}>
+      <div className={`uvc-menu ${className ? className : ''}`} role="menu">
         {children}
       </div>
     </div>
@@ -240,7 +247,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
 export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...props }) => {
   return (
-    <ul className="uvc-menu_items" role="menu" {...props}>
+    <ul className="uvc-menu_items" {...props}>
       {children}
     </ul>
   );

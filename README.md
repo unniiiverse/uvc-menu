@@ -6,23 +6,28 @@ Simple react menu with typescript interfaces.
 Default component usage
 ```tsx
 import React from "react";
-import { Menu, MenuItem } from "uvc-menu";
+import { Menu, MenuItem, MenuList } from "uvc-menu";
 
 // Optional styling
 import 'uvc-menu/css'
 
 
 const Component: React.FC = () => {
+  // This is inner of BUTTON element
   function Trigger() {
     return <p>Open</p>;
   }
 
   return (
     <div className="w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" menuClassName={'uvc-menu--fancy'}>
-        <MenuItem>Item 1</MenuItem>
-        <MenuItem>Item 2</MenuItem>
-        <MenuItem>Item 3</MenuItem>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'}>
+        <p>hello</p>
+
+        <MenuList>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+        </MenuList>
       </Menu>
     </div>
   );
@@ -45,12 +50,15 @@ interface IMenuProps {
   children: React.ReactNode | React.ReactNode[]
 
   /** Menu classname */
-  menuClassName?: string
+  className?: string
+
+  /** Trigger classname */
+  triggerClassName?: string
 
   /** Gap between trigger and menu
    * @default "16px"
    */
-  gap?: number,
+  gap?: number
 
   /** Menu appearing animation
    * @default "default"
@@ -69,6 +77,14 @@ interface IMenuProps {
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
+  /** Item inner */
+  children: React.ReactNode | React.ReactNode[],
+
+  /** Item classname */
+  className?: string
+}
+
+interface IMenuListProps extends HTMLProps<HTMLUListElement> {
   /** Item inner */
   children: React.ReactNode | React.ReactNode[],
 
