@@ -247,7 +247,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
 export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...props }) => {
   return (
-    <ul className="uvc-menu_items" {...props}>
+    <ul className={`uvc-menu_item ${className ? className : ''}`} {...props}>
       {children}
     </ul>
   );
