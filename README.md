@@ -13,6 +13,9 @@ import 'uvc-menu/css'
 
 
 const Component: React.FC = () => {
+  // Custom menu state
+  const [state, setState] = useState(true)
+
   // This is inner of BUTTON element
   function Trigger() {
     return <p>Open</p>;
@@ -20,7 +23,7 @@ const Component: React.FC = () => {
 
   return (
     <div className="w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'}>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'} state={state} stateSetter={setState}>
         <p>hello</p>
 
         <MenuList>
@@ -77,6 +80,17 @@ interface IMenuProps {
 
   /** Menu id */
   id?: string
+
+  /** Menu ref */
+  ref?: RefObject<any>
+
+  /** Is open state
+   * @default false
+   */
+  state?: boolean
+
+  /** Open state setter */
+  stateSetter?: (val: boolean) => void
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {

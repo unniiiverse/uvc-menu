@@ -44,6 +44,14 @@ interface IMenuProps {
 
   /** Menu ref */
   ref?: RefObject<any>
+
+  /** Is open state
+   * @default false
+   */
+  state?: boolean
+
+  /** Open state setter */
+  stateSetter?: (val: boolean) => void
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
@@ -64,9 +72,9 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter }) => {
   const parentRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(state || false);
 
   // Set default values to optional vars
   gap = gap || 16;
@@ -144,6 +152,8 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     if (isOpen) {
       // Open menu
 
+      if (stateSetter) stateSetter(isOpen)
+
       menu.classList.add('uvc-menu--active');
       trigger.classList.add('uvc-menu_trigger--active');
 
@@ -151,9 +161,11 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
         item.tabIndex = 0;
       });
 
-      menu.setAttribute('aria-hidden', 'false')
+      menu.setAttribute('aria-hidden', 'false');
     } else {
       // Close menu
+
+      if (stateSetter) stateSetter(isOpen)
 
       menu.classList.remove('uvc-menu--active');
       trigger.classList.remove('uvc-menu_trigger--active');
@@ -162,7 +174,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
         item.tabIndex = -1;
       });
 
-      menu.setAttribute('aria-hidden', 'true')
+      menu.setAttribute('aria-hidden', 'true');
     }
 
     // Handle animation
@@ -253,7 +265,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
 export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...props }) => {
   return (
-    <ul className={`uvc-menu_item ${className ? className : ''}`} {...props}>
+    <ul className={`uvc-menu_items ${className ? className : ''}`} {...props}>
       {children}
     </ul>
   );
