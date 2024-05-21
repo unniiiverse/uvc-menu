@@ -124,7 +124,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       } else if (direction === 'top' || direction === 'bottom') {
         centerTBAlign();
 
-        new ResizeObserver(centerTBAlign).observe(menu)
+        new ResizeObserver(centerTBAlign).observe(menu);
       }
     } else if (align === 'start') {
       if (direction === 'left' || direction === 'right') {
@@ -201,12 +201,11 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     // Handle closing
     function clickHandler(e: MouseEvent) {
       const self = e.target! as HTMLElement;
-      const menu = self.closest('.uvc-menu');
-      const trigger = self.closest('.uvc-menu_trigger');
+      const menu = self.closest('.uvc-menu_wrapper');
 
       if (closeAfter === 'outMenu') {
-        // Pass if click fired inside menu or on trigger
-        if (menu || trigger) return;
+        // Pass if click fired inside menu
+        if (menu) return;
 
         // Click fired outside menu, so close it
         setIsOpen(false);
