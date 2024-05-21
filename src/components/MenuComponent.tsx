@@ -5,6 +5,7 @@ import '../styles/menu.scss';
 type TAnimation = 'default' | 'slide';
 type TAlignment = 'start' | 'center' | 'end' | 'stretch';
 type TDirection = 'top' | 'bottom' | 'left' | 'right';
+type TCloseAfter = 'outMenu' | 'any';
 
 interface IMenuProps {
   /** Menu trigger inner. This is inner content of <button>. Passing another button element may cause nesting errors */
@@ -52,6 +53,14 @@ interface IMenuProps {
 
   /** Open state setter */
   stateSetter?: (val: boolean) => void
+
+  /** Close menu after action
+   * "outMenu" - Menu will close when click event fired OUT of menu
+   * "any" - Menu will close when click event fired ANYWHERE in the document (including menu)
+   * 
+   * @default 'outMenu'
+   */
+  closeAfter?: TCloseAfter
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
@@ -72,7 +81,7 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(state || false);
 
@@ -81,6 +90,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   animation = animation || 'default';
   align = align || 'center';
   direction = direction || 'bottom';
+  closeAfter = closeAfter || 'outMenu';
 
 
 
@@ -152,7 +162,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     if (isOpen) {
       // Open menu
 
-      if (stateSetter) stateSetter(isOpen)
+      if (stateSetter) stateSetter(isOpen);
 
       menu.classList.add('uvc-menu--active');
       trigger.classList.add('uvc-menu_trigger--active');
@@ -165,7 +175,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     } else {
       // Close menu
 
-      if (stateSetter) stateSetter(isOpen)
+      if (stateSetter) stateSetter(isOpen);
 
       menu.classList.remove('uvc-menu--active');
       trigger.classList.remove('uvc-menu_trigger--active');
@@ -186,11 +196,16 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       const menu = self.closest('.uvc-menu');
       const trigger = self.closest('.uvc-menu_trigger');
 
-      // Pass if click fired inside menu or on trigger
-      if (menu || trigger) return;
+      if (closeAfter === 'outMenu') {
+        // Pass if click fired inside menu or on trigger
+        if (menu || trigger) return;
 
-      // Click fired outside menu, so close it
-      setIsOpen(false);
+        // Click fired outside menu, so close it
+        setIsOpen(false);
+      } else {
+        // Click fired anywhere in the document
+        setIsOpen(false);
+      }
     }
 
     window.addEventListener('click', clickHandler);

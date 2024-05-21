@@ -44,6 +44,7 @@ export default Component;
 type TAnimation = 'default' | 'slide';
 type TAlignment = 'start' | 'center' | 'end' | 'stretch';
 type TDirection = 'top' | 'bottom' | 'left' | 'right';
+type TCloseAfter = 'outMenu' | 'any';
 
 interface IMenuProps {
   /** Menu trigger inner. This is inner content of <button>. Passing another button element may cause nesting errors */
@@ -91,6 +92,14 @@ interface IMenuProps {
 
   /** Open state setter */
   stateSetter?: (val: boolean) => void
+
+  /** Close menu after action
+   * "outMenu" - Menu will close when click event fired OUT of menu
+   * "any" - Menu will close when click event fired ANYWHERE in the document (also in menu)
+   * 
+   * @default 'outMenu'
+   */
+  closeAfter?: TCloseAfter
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
