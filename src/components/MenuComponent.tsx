@@ -61,6 +61,11 @@ interface IMenuProps {
    * @default 'outMenu'
    */
   closeAfter?: TCloseAfter
+
+  /** Is menu disabled
+   * @default false
+   */
+  disabled?: boolean
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
@@ -72,16 +77,16 @@ interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
 }
 
 interface IMenuListProps extends HTMLProps<HTMLUListElement> {
-  /** Item inner */
+  /** List inner */
   children: React.ReactNode | React.ReactNode[],
 
-  /** Item classname */
+  /** List classname */
   className?: string
 }
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter, disabled }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(state || false);
 
@@ -91,6 +96,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   align = align || 'center';
   direction = direction || 'bottom';
   closeAfter = closeAfter || 'outMenu';
+  disabled = Boolean(disabled);
 
 
 
@@ -274,7 +280,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   return (
     <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={parentRef}>
-      <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0}>
+      <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0} disabled={disabled}>
         {trigger}
       </button>
 

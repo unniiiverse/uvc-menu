@@ -95,11 +95,16 @@ interface IMenuProps {
 
   /** Close menu after action
    * "outMenu" - Menu will close when click event fired OUT of menu
-   * "any" - Menu will close when click event fired ANYWHERE in the document (also in menu)
+   * "any" - Menu will close when click event fired ANYWHERE in the document (including menu)
    * 
    * @default 'outMenu'
    */
   closeAfter?: TCloseAfter
+
+  /** Is menu disabled
+   * @default false
+   */
+  disabled?: boolean
 }
 
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
