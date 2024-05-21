@@ -122,7 +122,9 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       if (direction === 'left' || direction === 'right') {
         menu.style.bottom = `-${(menu.offsetHeight / 2) - (trigger.offsetHeight / 2)}px`;
       } else if (direction === 'top' || direction === 'bottom') {
-        menu.style.left = `${(trigger.offsetWidth / 2) - (menu.offsetWidth / 2)}px`;
+        centerTBAlign();
+
+        new ResizeObserver(centerTBAlign).observe(menu)
       }
     } else if (align === 'start') {
       if (direction === 'left' || direction === 'right') {
@@ -142,6 +144,12 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       } else {
         console.warn(`[uvc-menu]: Stretch alignment does not work on sides direction`);
       }
+    }
+
+
+
+    function centerTBAlign() {
+      menu.style.left = `${(trigger.scrollWidth / 2) - (menu.scrollWidth / 2)}px`;
     }
 
   }, []);

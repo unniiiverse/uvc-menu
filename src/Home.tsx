@@ -15,11 +15,11 @@ const Home: React.FC = () => {
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'} id="fsdfsdsfd" state={state} stateSetter={setState}>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" className={'uvc-menu--fancy'} id="fsdfsdsfd" state={state} stateSetter={setState}>
         <p>hello</p>
 
-        <MenuList>
-          <MenuItem>Item</MenuItem>
+        <MenuList className="w-fit">
+          <MenuItem id="haha">Item</MenuItem>
           <MenuItem>Item</MenuItem>
           <MenuItem>Item</MenuItem>
         </MenuList>
