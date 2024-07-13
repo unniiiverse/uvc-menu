@@ -9,13 +9,20 @@ const Home: React.FC = () => {
     return <p>open 1111111111111111111111111111111111111111</p>;
   }
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log('Menu closed');
+  //     setState(false);
+  //   }, 3000);
+  // }, []);
+
   useEffect(() => {
-    console.log(state);
+    console.log(`OUT - ${state}`);
   }, [state]);
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} animation="slide" direction="bottom" className={'uvc-menu--fancy'} id="fsdfsdsfd" state={state} stateSetter={setState} disabled>
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" className={'uvc-menu--fancy'} id="fsdfsdsfd" statePriority="outer" state={state} stateSetter={setState}>
         <p>hello</p>
 
         <MenuList className="w-fit">
@@ -24,6 +31,8 @@ const Home: React.FC = () => {
           <MenuItem>Item</MenuItem>
         </MenuList>
       </Menu>
+
+      <button onClick={() => setState(!state)}>independent</button>
 
       {/* <Menu trigger={<Trigger />} animation="slide" direction="left" menuClassName={'uvc-menu--fancy'}>
         <MenuItem>Item</MenuItem>

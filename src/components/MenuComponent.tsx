@@ -6,6 +6,7 @@ type TAnimation = 'default' | 'slide';
 type TAlignment = 'start' | 'center' | 'end' | 'stretch';
 type TDirection = 'top' | 'bottom' | 'left' | 'right';
 type TCloseAfter = 'outMenu' | 'any';
+type TStatePriority = 'inner' | 'outer';
 
 interface IMenuProps {
   /** Menu trigger inner. This is inner content of <button>. Passing another button element may cause nesting errors */
@@ -46,10 +47,19 @@ interface IMenuProps {
   /** Menu ref */
   ref?: RefObject<any>
 
-  /** Is open state
+  /** Initial state.
+   * @see statePriority
    * @default false
    */
   state?: boolean
+
+  /** State priority
+   * "inner" - State property will be readonly and can't be managed by code
+   * "outer" - Requires stateSetter and state specified. State can be managed by code
+   * 
+   * @default "inner"
+   */
+  statePriority?: TStatePriority
 
   /** Open state setter */
   stateSetter?: (val: boolean) => void
@@ -86,9 +96,9 @@ interface IMenuListProps extends HTMLProps<HTMLUListElement> {
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter, disabled }) => {
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter, disabled, statePriority }) => {
   const parentRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(state || false);
+  const [isOpen, setIsOpen] = useState(Boolean(state));
 
   // Set default values to optional vars
   gap = gap || 16;
@@ -97,7 +107,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   direction = direction || 'bottom';
   closeAfter = closeAfter || 'outMenu';
   disabled = Boolean(disabled);
-
+  statePriority = statePriority || 'inner';
 
 
   /** Initialize */
@@ -158,10 +168,44 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
       menu.style.left = `${(trigger.scrollWidth / 2) - (menu.scrollWidth / 2)}px`;
     }
 
+
+
+    window.addEventListener('click', e => {
+      const self = e.target! as HTMLElement;
+      const menu = self.closest('.uvc-menu_wrapper');
+
+      if (closeAfter === 'outMenu') {
+        // Pass if click fired inside menu
+        if (menu) return;
+
+        // Click fired outside menu, so close it
+        setIsOpen(false);
+      } else {
+        // Click fired anywhere in the document
+        setIsOpen(false);
+      }
+    });
+
   }, []);
 
   /** Handle state */
   useEffect(() => {
+    if (statePriority === 'inner') {
+      changeState(isOpen);
+    } else if (statePriority === 'outer') {
+      if (state === undefined || stateSetter === undefined) throw new Error('[uvc-menu]: State and stateSetter must be specified in outer priority mode');
+
+      changeState(state);
+    }
+  }, [isOpen, state])
+
+  // Sync inner with outer states
+  useEffect(() => {
+    stateSetter ? stateSetter(isOpen) : null;
+  }, [isOpen])
+
+
+  function changeState(isOpen: boolean) {
     const parent = parentRef.current;
 
     // Pass if parent is undefined
@@ -202,41 +246,16 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     }
 
     // Handle animation
-    handleAnimation();
-
-    // Handle closing
-    function clickHandler(e: MouseEvent) {
-      const self = e.target! as HTMLElement;
-      const menu = self.closest('.uvc-menu_wrapper');
-
-      if (closeAfter === 'outMenu') {
-        // Pass if click fired inside menu
-        if (menu) return;
-
-        // Click fired outside menu, so close it
-        setIsOpen(false);
-      } else {
-        // Click fired anywhere in the document
-        setIsOpen(false);
-      }
-    }
-
-    window.addEventListener('click', clickHandler);
-
-    return () => {
-      window.removeEventListener('click', clickHandler);
-    };
-  }, [isOpen]);
-
-
+    handleAnimation(isOpen);
+  }
 
   /** Toggle menu handler */
-  function toggleMenu(e: React.MouseEvent) {
+  function toggleMenu() {
     setIsOpen(!isOpen);
   }
 
   /** Animation handler */
-  function handleAnimation() {
+  function handleAnimation(isOpen: boolean) {
     const parent = parentRef.current;
 
     // Pass if parent is undefined

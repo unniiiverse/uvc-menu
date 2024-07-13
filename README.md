@@ -21,6 +21,9 @@ const Component: React.FC = () => {
     return <p>Open</p>;
   }
 
+  // Log current menu state. Can not be changed
+  useEffect(() => console.log(state), [state])
+
   return (
     <div className="w-full h-full min-h-screen bg-[#888] p-[200px]">
       <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'} state={state} stateSetter={setState}>
@@ -39,12 +42,45 @@ const Component: React.FC = () => {
 export default Component;
 ```
 
+Menu state can be managed synthetically
+```tsx
+const Component: React.FC = () => {
+  // Custom menu state
+  const [state, setState] = useState(true)
+
+  // This is inner of BUTTON element
+  function Trigger() {
+    return <p>Open</p>;
+  }
+
+  // Log current menu state. Can be changed
+  useEffect(() => console.log(state), [state])
+
+  return (
+    <div className="w-full h-full min-h-screen bg-[#888] p-[200px]">
+      <Menu trigger={<Trigger />} animation="slide" direction="bottom" align="stretch" className={'uvc-menu--fancy'} statePriority="outer" state={state} stateSetter={setState}>
+        <p>hello</p>
+
+        <MenuList>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+          <MenuItem>Item</MenuItem>
+        </MenuList>
+      </Menu>
+
+      <button onClick={() => setState(!state)}>Out menu state setter</button>
+    </div>
+  );
+};
+```
+
 ## API
 ```ts
 type TAnimation = 'default' | 'slide';
 type TAlignment = 'start' | 'center' | 'end' | 'stretch';
 type TDirection = 'top' | 'bottom' | 'left' | 'right';
 type TCloseAfter = 'outMenu' | 'any';
+type TStatePriority = 'inner' | 'outer';
 
 interface IMenuProps {
   /** Menu trigger inner. This is inner content of <button>. Passing another button element may cause nesting errors */
@@ -85,10 +121,19 @@ interface IMenuProps {
   /** Menu ref */
   ref?: RefObject<any>
 
-  /** Is open state
+  /** Initial state.
+   * @see statePriority
    * @default false
    */
   state?: boolean
+
+  /** State priority
+   * "inner" - State property will be readonly and can't be managed by code
+   * "outer" - Requires stateSetter and state specified. State can be managed by code
+   * 
+   * @default "inner"
+   */
+  statePriority?: TStatePriority
 
   /** Open state setter */
   stateSetter?: (val: boolean) => void
@@ -116,12 +161,13 @@ interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
 }
 
 interface IMenuListProps extends HTMLProps<HTMLUListElement> {
-  /** Item inner */
+  /** List inner */
   children: React.ReactNode | React.ReactNode[],
 
-  /** Item classname */
+  /** List classname */
   className?: string
 }
+
 ```
 
 ## Get it now
