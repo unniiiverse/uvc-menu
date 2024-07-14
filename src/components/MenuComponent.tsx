@@ -110,6 +110,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   statePriority = statePriority || 'inner';
 
 
+
   /** Initialize */
   useEffect(() => {
     const parent = parentRef.current;
@@ -190,9 +191,6 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   /** Handle state */
   useEffect(() => {
-    console.log(state)
-    console.log(isOpen)
-
     if (statePriority === 'inner') {
       changeState(isOpen);
     } else if (statePriority === 'outer') {
@@ -208,7 +206,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   }, [isOpen]);
 
   useEffect(() => {
-    setIsOpen(Boolean(state))
+    setIsOpen(Boolean(state));
   }, [state]);
 
 
