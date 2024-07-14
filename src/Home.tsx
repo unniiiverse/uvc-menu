@@ -9,16 +9,12 @@ const Home: React.FC = () => {
     return <p>open 1111111111111111111111111111111111111111</p>;
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log('Menu closed');
-  //     setState(false);
-  //   }, 3000);
-  // }, []);
-
   useEffect(() => {
-    console.log(`OUT - ${state}`);
-  }, [state]);
+    setTimeout(() => {
+      console.log('Menu closed');
+      setState(false);
+    }, 3000);
+  }, []);
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">

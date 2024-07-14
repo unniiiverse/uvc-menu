@@ -190,6 +190,9 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
   /** Handle state */
   useEffect(() => {
+    console.log(state)
+    console.log(isOpen)
+
     if (statePriority === 'inner') {
       changeState(isOpen);
     } else if (statePriority === 'outer') {
@@ -197,12 +200,16 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
       changeState(state);
     }
-  }, [isOpen, state])
+  }, [isOpen, state]);
 
-  // Sync inner with outer states
+  // Sync states
   useEffect(() => {
     stateSetter ? stateSetter(isOpen) : null;
-  }, [isOpen])
+  }, [isOpen]);
+
+  useEffect(() => {
+    setIsOpen(Boolean(state))
+  }, [state]);
 
 
   function changeState(isOpen: boolean) {
