@@ -16,9 +16,12 @@ interface IMenuProps {
   children: React.ReactNode | React.ReactNode[]
 
   /** Menu classname */
+  menuClassName?: string
+
+  /** Menu wrapper classname */
   className?: string
 
-  /** Trigger classname */
+  /** Trigger button classname */
   triggerClassName?: string
 
   /** Gap between trigger and menu
@@ -81,22 +84,17 @@ interface IMenuProps {
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
   /** Item inner */
   children: React.ReactNode | React.ReactNode[],
-
-  /** Item classname */
-  className?: string
 }
 
 interface IMenuListProps extends HTMLProps<HTMLUListElement> {
   /** List inner */
   children: React.ReactNode | React.ReactNode[],
-
-  /** List classname */
-  className?: string
 }
 
 
 
-export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter, disabled, statePriority }) => {
+/** Dropdown menu */
+export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, animation, align, direction, triggerClassName, id, ref, state, stateSetter, closeAfter, disabled, statePriority, menuClassName }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(Boolean(state));
 
@@ -119,46 +117,48 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     if (!parent) return;
 
     const trigger = parent.querySelector('.uvc-menu_trigger')! as HTMLButtonElement;
-    const menu = parent.querySelector('.uvc-menu')! as HTMLDivElement;
+    const wrapper = parent.querySelector('.uvc-menu_wrapper')! as HTMLDivElement;
 
-    if (!trigger || !menu) return;
+    if (!trigger || !wrapper) return;
 
     // Set position due to direction
     if (direction === 'bottom') {
-      menu.style.top = `${trigger.offsetHeight + gap!}px`;
+      wrapper.style.top = `${trigger.offsetHeight + gap!}px`;
     } else if (direction === 'top') {
-      menu.style.bottom = `${trigger.offsetHeight + gap!}px`;
+      wrapper.style.bottom = `${trigger.offsetHeight + gap!}px`;
     } else if (direction === 'left') {
-      menu.style.right = `${trigger.offsetWidth + gap!}px`;
+      wrapper.style.right = `${trigger.offsetWidth + gap!}px`;
     } else if (direction === 'right') {
-      menu.style.left = `${trigger.offsetWidth + gap!}px`;
+      wrapper.style.left = `${trigger.offsetWidth + gap!}px`;
     }
 
     // Set aligment
     if (align === 'center') {
       if (direction === 'left' || direction === 'right') {
-        menu.style.bottom = `-${(menu.offsetHeight / 2) - (trigger.offsetHeight / 2)}px`;
+        wrapper.style.bottom = `-${(wrapper.offsetHeight / 2) - (trigger.offsetHeight / 2)}px`;
       } else if (direction === 'top' || direction === 'bottom') {
         centerTBAlign();
 
-        new ResizeObserver(centerTBAlign).observe(menu);
+        new ResizeObserver(centerTBAlign).observe(wrapper);
       }
     } else if (align === 'start') {
       if (direction === 'left' || direction === 'right') {
-        menu.style.bottom = '0';
+        wrapper.style.top = '0';
       } else if (direction === 'top' || direction === 'bottom') {
-        menu.style.left = `0`;
+        wrapper.style.left = `0`;
       }
     } else if (align === 'end') {
       if (direction === 'left' || direction === 'right') {
-        menu.style.top = '0';
+        wrapper.style.bottom = '0';
       } else if (direction === 'top' || direction === 'bottom') {
-        menu.style.right = `0`;
+        wrapper.style.right = `0`;
       }
     } else if (align === 'stretch') {
       if (direction === 'top' || direction === 'bottom') {
-        menu.style.width = '100%';
+        wrapper.style.width = '100%';
       } else {
+        // Use center alignment as default
+        wrapper.style.bottom = `-${(wrapper.offsetHeight / 2) - (trigger.offsetHeight / 2)}px`;
         console.warn(`[uvc-menu]: Stretch alignment does not work on sides direction`);
       }
     }
@@ -166,28 +166,29 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
 
 
     function centerTBAlign() {
-      menu.style.left = `${(trigger.scrollWidth / 2) - (menu.scrollWidth / 2)}px`;
+      wrapper.style.left = `${(trigger.scrollWidth / 2) - (wrapper.scrollWidth / 2)}px`;
     }
+  }, []);
 
+  useEffect(() => {
+    window.addEventListener('click', handleClick);
 
-
-    window.addEventListener('click', e => {
+    function handleClick(e: MouseEvent) {
       const self = e.target! as HTMLElement;
-      const menu = self.closest('.uvc-menu_wrapper');
+      const menu = self.closest('.uvc-menu');
+      const trigger = self.closest('.uvc-menu_trigger');
 
       if (closeAfter === 'outMenu') {
-        // Pass if click fired inside menu
-        if (menu) return;
-
-        // Click fired outside menu, so close it
-        setIsOpen(false);
-      } else {
-        // Click fired anywhere in the document
-        setIsOpen(false);
+        if (!menu) setIsOpen(false);
+      } else if (closeAfter === 'any') {
+        if (menu && !trigger) setIsOpen(false);
       }
-    });
+    }
 
-  }, []);
+    return () => {
+      window.removeEventListener('click', handleClick);
+    };
+  }, [isOpen])
 
   /** Handle state */
   useEffect(() => {
@@ -217,7 +218,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     if (!parent) return;
 
     const trigger = parent.querySelector('.uvc-menu_trigger')! as HTMLButtonElement;
-    const menu = parent.querySelector('.uvc-menu')! as HTMLDivElement;
+    const menu = parent.querySelector('.uvc-menu_wrapper')! as HTMLDivElement;
     const items = parent.querySelectorAll('.uvc-menu_item') as NodeListOf<HTMLLIElement>;
 
     if (!trigger || !menu) return;
@@ -267,7 +268,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     if (!parent) return;
 
     const trigger = parent.querySelector('.uvc-menu_trigger')! as HTMLButtonElement;
-    const menu = parent.querySelector('.uvc-menu')! as HTMLDivElement;
+    const menu = parent.querySelector('.uvc-menu_wrapper')! as HTMLDivElement;
 
     if (!trigger || !menu) return;
 
@@ -303,18 +304,19 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
   }
 
   return (
-    <div className="uvc-menu_wrapper uvc-menu_animation--slide" ref={parentRef}>
+    <div className={`uvc-menu ${menuClassName ? menuClassName : ''}`} ref={parentRef}>
       <button className={`uvc-menu_trigger ${triggerClassName ? triggerClassName : ''}`} onClick={toggleMenu} tabIndex={0} disabled={disabled}>
         {trigger}
       </button>
 
-      <div className={`uvc-menu ${className ? className : ''}`} role="menu" id={id} ref={ref}>
+      <div className={`uvc-menu_wrapper ${className ? className : ''}`} role="menu" id={id} ref={ref}>
         {children}
       </div>
     </div>
   );
 };
 
+/** Menu list */
 export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...props }) => {
   return (
     <ul className={`uvc-menu_items ${className ? className : ''}`} {...props}>
@@ -323,6 +325,7 @@ export const MenuList: React.FC<IMenuListProps> = ({ children, className, ...pro
   );
 };
 
+/** Menu list item */
 export const MenuItem: React.FC<IMenuItemProps> = ({ children, className, ...props }) => {
   return (
     <li className={`uvc-menu_item ${className ? className : ''}`} role="menuitem" tabIndex={-1} {...props}>
