@@ -90,9 +90,12 @@ interface IMenuProps {
   children: React.ReactNode | React.ReactNode[]
 
   /** Menu classname */
+  menuClassName?: string
+
+  /** Menu wrapper classname */
   className?: string
 
-  /** Trigger classname */
+  /** Trigger button classname */
   triggerClassName?: string
 
   /** Gap between trigger and menu
@@ -155,20 +158,16 @@ interface IMenuProps {
 interface IMenuItemProps extends HTMLProps<HTMLLIElement> {
   /** Item inner */
   children: React.ReactNode | React.ReactNode[],
-
-  /** Item classname */
-  className?: string
 }
 
 interface IMenuListProps extends HTMLProps<HTMLUListElement> {
   /** List inner */
   children: React.ReactNode | React.ReactNode[],
-
-  /** List classname */
-  className?: string
 }
-
 ```
+
+## Migration
+- [1.2.3 > 1.3](./docs/migration/1.3.md)
 
 ## Get it now
 ```bash

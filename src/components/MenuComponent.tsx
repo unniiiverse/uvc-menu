@@ -188,7 +188,7 @@ export const Menu: React.FC<IMenuProps> = ({ trigger, children, className, gap, 
     return () => {
       window.removeEventListener('click', handleClick);
     };
-  }, [isOpen])
+  }, [isOpen]);
 
   /** Handle state */
   useEffect(() => {

@@ -12,10 +12,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="Home w-full h-full min-h-screen bg-[#888] p-[200px]">
-      <Menu trigger={<Trigger />} direction="bottom" align="center" closeAfter="any" className={'uvc-menu--fancy'} id="fsdfsdsfd">
-        <p>hello</p>
-
-        <MenuList className="w-fit">
+      <Menu trigger={<Trigger />} direction="bottom" align="stretch" className={'uvc-menu--fancy'} id="fsdfsdsfd">
+        <MenuList>
           <MenuItem id="haha">Item</MenuItem>
           <MenuItem>Item</MenuItem>
           <MenuItem>Item</MenuItem>
@@ -23,6 +21,9 @@ const Home: React.FC = () => {
       </Menu>
 
       <button onClick={() => setState(!state)}>independent</button>
+      <div className="relative">
+        <div className="w-[500px] h-[500px] bg-red-400 absolute z-[5] -top-[20px] left-[20px]"></div>
+      </div>
 
       {/* <Menu trigger={<Trigger />} animation="slide" direction="left" menuClassName={'uvc-menu--fancy'}>
         <MenuItem>Item</MenuItem>

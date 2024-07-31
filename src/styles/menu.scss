@@ -23,6 +23,15 @@
     height: fit-content;
   }
 
+  &_items {
+    display: block;
+    width: 100%;
+  }
+
+  &_item {
+    width: 100%;
+  }
+
 
 
   &--active {
